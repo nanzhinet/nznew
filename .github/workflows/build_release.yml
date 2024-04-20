@@ -24,7 +24,7 @@ jobs:
 
       - id: version
         run: |
-          version=$(node -e "import('@gkd-kit/tools').then((m) => m.stdoutGkdVersion());")
+          version=$(node -e "import('@nanzhinet/tools').then((m) => m.stdoutGkdVersion());")
           echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Git commit
@@ -64,8 +64,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/Adpro_gkd.json5
-          asset_name: Adpro_gkd_${{ steps.version.outputs.version }}.json5
+          asset_path: ./dist/nz_gkd.json5
+          asset_name: nz_gkd_${{ steps.version.outputs.version }}.json5
           asset_content_type: application/json          
 
       - name: Publish package
@@ -74,6 +74,6 @@ jobs:
         if: ${{ steps.commit.outcome == 'success' && env.NPM_TOKEN != '' }}
         run: |
           pnpm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          node -e "import('@gkd-kit/tools').then((m) => m.updatePkgVersion());"
+          node -e "import('@nanzhinet/tools').then((m) => m.updatePkgVersion());"
           pnpm publish --no-git-checks
-          node -e "import('@gkd-kit/tools').then((m) => m.syncNpmmirror());"
+          node -e "import('@nanzhinet/tools').then((m) => m.syncNpmmirror());"
